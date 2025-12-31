@@ -1,0 +1,8 @@
+.vscode/
+*.log
+diagnose.html
+seed_data.html
+triggers.sql
+schema.sql
+.DS_Store
+node_modules/

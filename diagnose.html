@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>IskuXidh - System Fixer</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            padding: 40px;
+            background: #f4f7f6;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #007AFF;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+        }
+
+        .btn-blue {
+            background: #007AFF;
+            color: white;
+        }
+
+        .btn-green {
+            background: #10B981;
+            color: white;
+        }
+
+        .log {
+            background: #1f2937;
+            color: #10B981;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-family: monospace;
+            height: 300px;
+            overflow-y: auto;
+        }
+
+        .error {
+            color: #ef4444;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h1>System Diagnostic & Fixer</h1>
+        <p>Use this tool to fix connection issues and seed your database with sample shaqooyin.</p>
+
+        <div class="flex">
+            <button class="btn btn-blue" onclick="runCheck()">1. Run Connection Check</button>
+            <button class="btn btn-green" onclick="forceSeed()">2. Force Seed Sample Jobs</button>
+        </div>
+
+        <div id="logs" class="log">Ready...</div>
+    </div>
+
+    <script>
+        const logs = document.getElementById('logs');
+        function log(msg, isError = false) {
+            const div = document.createElement('div');
+            div.className = isError ? 'error' : '';
+            div.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            logs.appendChild(div);
+            logs.scrollTop = logs.scrollHeight;
+        }
+
+        async function runCheck() {
+            log("Starting diagnostic...");
+            try {
+                if (typeof db === 'undefined') throw new Error("Supabase client 'db' is not defined. Check config.js");
+
+                const { data: { session } } = await db.auth.getSession();
+                log("Session Status: " + (session ? "Logged In (" + session.user.email + ")" : "Not Logged In"));
+
+                const { data: jobs, error } = await db.from('jobs').select('count', { count: 'exact', head: true });
+                if (error) throw error;
+                log("Jobs in database: " + jobs.length + " rows found (or accessible).");
+
+                log("System check passed!", false);
+            } catch (err) {
+                log("Check Failed: " + err.message, true);
+            }
+        }
+
+        async function forceSeed() {
+            log("Attempting to force seed data...");
+            try {
+                const { data: { user } } = await db.auth.getUser();
+                if (!user) throw new Error("You must be logged in to seed jobs (for employer_id). Please login first.");
+
+                // Ensure profile exists to avoid FK error
+                log("Ensuring Profile exists for " + user.id);
+                await db.from('profiles').upsert({ id: user.id, email: user.email, role: 'employer', full_name: 'Demo Admin' });
+
+                const sampleJobs = [
+                    { employer_id: user.id, title: 'Senior Developer', company: 'SomaliTech', location: 'Mogadishu', type: 'Full-time', salary: '$1000', description: 'Sample job', status: 'active' },
+                    { employer_id: user.id, title: 'Nurse', company: 'Madina Hospital', location: 'Mogadishu', type: 'Full-time', salary: '$500', description: 'Sample job', status: 'active' },
+                    { employer_id: user.id, title: 'Accountant', company: 'Dahabshiil', location: 'Hargeisa', type: 'Contract', salary: '$700', description: 'Sample job', status: 'active' }
+                ];
+
+                log("Inserting 3 sample jobs...");
+                const { error } = await db.from('jobs').insert(sampleJobs);
+                if (error) throw error;
+
+                log("Data seeded successfully!", false);
+                log("Go to jobs.html to see them.", false);
+            } catch (err) {
+                log("Seed Failed: " + err.message, true);
+            }
+        }
+    </script>
+</body>
+
+</html>

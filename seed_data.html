@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Fix Profile & Seed Jobs</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .log {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-family: monospace;
+        }
+
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Fixing Account & Seeding Data</h1>
+    <div id="logs" class="log">Starting process...</div>
+
+    <script>
+        const logDiv = document.getElementById('logs');
+        function log(msg, type = 'info') {
+            const entry = document.createElement('div');
+            entry.innerText = `> ${msg}`;
+            if (type === 'error') entry.className = 'error';
+            if (type === 'success') entry.className = 'success';
+            logDiv.appendChild(entry);
+            console.log(msg);
+        }
+
+        async function fixAndSeed() {
+            try {
+                // 1. Get Current User
+                log("Checking authentication...");
+                const { data: { user }, error: authError } = await db.auth.getUser();
+
+                if (authError || !user) {
+                    throw new Error("You must be logged in first! Go to auth.html and log in.");
+                }
+                log(`User found: ${user.email} (${user.id})`, 'success');
+
+                // 2. Fix Profile (Upsert)
+                log("Checking/Creating Profile...");
+                const { error: profileError } = await db.from('profiles').upsert({
+                    id: user.id,
+                    email: user.email,
+                    role: 'employer', // Force role to employer for seeding
+                    full_name: user.user_metadata.full_name || 'Demo Employer',
+                    city: 'Mogadishu'
+                });
+
+                if (profileError) throw profileError;
+                log("Profile OK (Foreign Key Issue Fixed)", 'success');
+
+                // 3. Insert Sample Jobs
+                log("Inserting sample jobs...");
+                const jobs = [
+                    {
+                        employer_id: user.id,
+                        title: 'Technical Support Specialist',
+                        company: 'Hormuud Telecom',
+                        location: 'Mogadishu',
+                        type: 'Full-time',
+                        salary: '$600 - $800',
+                        description: 'Helping customers troubleshoot internet issues. Day shift.',
+                        status: 'active'
+                    },
+                    {
+                        employer_id: user.id,
+                        title: 'Delivery Driver',
+                        company: 'Guban Express',
+                        location: 'Hargeisa',
+                        type: 'Gig',
+                        salary: '$15 / trip',
+                        description: 'Must have own motorbike and valid license.',
+                        status: 'active'
+                    },
+                    {
+                        employer_id: user.id,
+                        title: 'Graphic Designer',
+                        company: 'Creative Som',
+                        location: 'Remote',
+                        type: 'Contract',
+                        salary: '$400/mo',
+                        description: 'Designing posts for social media. Canva or Photoshop skills required.',
+                        status: 'active'
+                    },
+                    {
+                        employer_id: user.id,
+                        title: 'English Teacher',
+                        company: 'Private School',
+                        location: 'Bosaso',
+                        type: 'Full-time',
+                        salary: '$500',
+                        description: 'Teaching primary students English language basics.',
+                        status: 'active'
+                    }
+                ];
+
+                const { error: jobsError } = await db.from('jobs').insert(jobs);
+
+                if (jobsError) throw jobsError;
+
+                log("SUCCESS! 4 Jobs added.", 'success');
+                log("Redirecting to Jobs page in 3 seconds...");
+
+                setTimeout(() => {
+                    window.location.href = 'jobs.html';
+                }, 3000);
+
+            } catch (err) {
+                log(err.message || err, 'error');
+                log("Please make sure you are logged in on auth.html first.", 'error');
+            }
+        }
+
+        fixAndSeed();
+    </script>
+</body>
+
+</html>

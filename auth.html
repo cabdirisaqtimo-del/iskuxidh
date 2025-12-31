@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Signup - IskuXidh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#007AFF',
+                            green: '#10B981',
+                            yellow: '#FBBF24',
+                            dark: '#1F2937'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="bg-gray-50 h-screen flex items-center justify-center p-4">
+
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 w-full max-w-md overflow-hidden">
+
+        <!-- Header -->
+        <div class="p-8 pb-0 text-center">
+            <div
+                class="w-12 h-12 bg-brand-blue rounded-lg flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
+                <i data-lucide="link"></i>
+            </div>
+            <h1 class="text-2xl font-bold font-heading mb-2">Welcome to IskuXidh</h1>
+            <p class="text-gray-500 text-sm">Please select your account type</p>
+        </div>
+
+        <!-- Toggle -->
+        <!-- Toggle Mode (Login / Signup) -->
+        <div class="flex gap-4 mb-6 border-b border-gray-100 pb-4">
+            <button id="tab-login" onclick="switchTab('login')"
+                class="flex-1 pb-2 font-medium text-brand-blue border-b-2 border-brand-blue transition">Login</button>
+            <button id="tab-signup" onclick="switchTab('signup')"
+                class="flex-1 pb-2 font-medium text-gray-400 hover:text-gray-600 transition">Sign Up</button>
+        </div>
+
+        <!-- Role Selector (Only for Signup) -->
+        <div id="role-selector" class="hidden mb-6">
+            <p class="text-sm font-medium text-gray-700 mb-2">I am a...</p>
+            <div class="bg-gray-100 p-1 rounded-xl flex">
+                <button id="btn-seeker" onclick="setType('seeker')"
+                    class="flex-1 py-2 text-sm font-medium rounded-lg shadow-sm bg-white text-gray-900 transition-all">
+                    Job Seeker
+                </button>
+                <button id="btn-employer" onclick="setType('employer')"
+                    class="flex-1 py-2 text-sm font-medium rounded-lg text-gray-500 hover:text-gray-900 transition-all">
+                    Employer
+                </button>
+            </div>
+        </div>
+
+        <!-- Auth Form -->
+        <form id="auth-form" class="space-y-4" onsubmit="return handleSubmit(event)">
+            <!-- Error Message -->
+            <div id="error-msg" class="hidden bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-100">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                <div class="relative">
+                    <i data-lucide="mail" class="absolute left-3 top-2.5 text-gray-400 w-5 h-5"></i>
+                    <input id="email" type="email" placeholder="name@example.com" required
+                        class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <div class="relative">
+                    <i data-lucide="lock" class="absolute left-3 top-2.5 text-gray-400 w-5 h-5"></i>
+                    <input id="password" type="password" placeholder="••••••••" required minlength="6"
+                        class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition">
+                </div>
+            </div>
+
+            <!-- Extra Fields for Employer Signup -->
+            <div id="employer-fields" class="hidden space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
+                    <input id="company-name" type="text" placeholder="e.g., Hormuud"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition">
+                </div>
+            </div>
+
+            <button type="submit" id="submit-btn"
+                class="w-full bg-brand-blue text-white font-bold py-3 rounded-xl hover:bg-blue-600 transition shadow-lg shadow-brand-blue/30 flex items-center justify-center gap-2">
+                Login <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+        </form>
+    </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+
+    <script>
+        lucide.createIcons();
+
+        // redirectIfLoggedIn(); // Auto-redirect if already authenticated
+
+        let mode = 'login'; // login | signup
+        let role = 'seeker'; // seeker | employer
+
+        function switchTab(newMode) {
+            mode = newMode;
+
+            // UI Update
+            const tabLogin = document.getElementById('tab-login');
+            const tabSignup = document.getElementById('tab-signup');
+            const roleSelector = document.getElementById('role-selector');
+            const submitBtn = document.getElementById('submit-btn');
+            const employerFields = document.getElementById('employer-fields');
+
+            if (mode === 'login') {
+                tabLogin.className = 'flex-1 pb-2 font-medium text-brand-blue border-b-2 border-brand-blue transition';
+                tabSignup.className = 'flex-1 pb-2 font-medium text-gray-400 hover:text-gray-600 transition';
+                roleSelector.classList.add('hidden');
+                employerFields.classList.add('hidden');
+                submitBtn.innerHTML = 'Login <i data-lucide="arrow-right" class="w-4 h-4"></i>';
+                lucide.createIcons();
+            } else {
+                tabSignup.className = 'flex-1 pb-2 font-medium text-brand-blue border-b-2 border-brand-blue transition';
+                tabLogin.className = 'flex-1 pb-2 font-medium text-gray-400 hover:text-gray-600 transition';
+                roleSelector.classList.remove('hidden');
+                submitBtn.innerHTML = 'Create Account <i data-lucide="user-plus" class="w-4 h-4"></i>';
+                lucide.createIcons();
+                // Check if employer fields need satisfying
+                setType(role);
+            }
+        }
+
+        function setType(newRole) {
+            role = newRole;
+            const btnSeeker = document.getElementById('btn-seeker');
+            const btnEmployer = document.getElementById('btn-employer');
+            const employerFields = document.getElementById('employer-fields');
+
+            if (role === 'employer') {
+                btnEmployer.className = 'flex-1 py-2 text-sm font-medium rounded-lg shadow-sm bg-white text-gray-900 transition-all';
+                btnSeeker.className = 'flex-1 py-2 text-sm font-medium rounded-lg text-gray-500 hover:text-gray-900 transition-all';
+                if (mode === 'signup') employerFields.classList.remove('hidden');
+            } else {
+                btnSeeker.className = 'flex-1 py-2 text-sm font-medium rounded-lg shadow-sm bg-white text-gray-900 transition-all';
+                btnEmployer.className = 'flex-1 py-2 text-sm font-medium rounded-lg text-gray-500 hover:text-gray-900 transition-all';
+                employerFields.classList.add('hidden');
+            }
+        }
+
+        async function handleSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('error-msg');
+            const submitBtn = document.getElementById('submit-btn');
+
+            // Reset Error
+            errorMsg.classList.add('hidden');
+            errorMsg.innerText = '';
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-75');
+
+            try {
+                if (mode === 'signup') {
+                    // Sign Up Logic
+                    const additionalData = {};
+                    if (role === 'employer') {
+                        additionalData.full_name = document.getElementById('company-name').value;
+                    }
+
+                    const { data, error } = await handleSignUp(email, password, role, additionalData);
+
+                    if (error) throw error;
+
+                    // On success, try to auto-login or redirect
+                    // Supabase auto-logs in after signup usually, unless confirm required
+                    window.location.href = role === 'employer' ? 'employer.html' : 'profile.html';
+
+                } else {
+                    // Login Logic
+                    const { data, error } = await handleSignIn(email, password);
+
+                    if (error) throw error;
+
+                    // Redirect based on role
+                    // For now, simple redirect. ideally fetch role.
+                    // Let's assume profile.html handles role check or redirect logic in auth.js handles it.
+                    // For now, let's use the helper
+                    await redirectIfLoggedIn();
+                }
+            } catch (err) {
+                console.error(err);
+                errorMsg.innerText = err.message || "An error occurred";
+                errorMsg.classList.remove('hidden');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-75');
+            }
+
+            return false;
+        }
+    </script>
+</body>
+
+</html>
