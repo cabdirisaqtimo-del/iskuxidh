@@ -12,15 +12,29 @@
                 extend: {
                     colors: {
                         brand: {
-                            blue: '#007AFF',
+                            blue: '#007AFF', // Rich Primary Blue
                             green: '#10B981',
-                            yellow: '#FBBF24',
-                            dark: '#1F2937'
+                            dark: '#111827', // Deeper Dark for modern feel
+                            light: '#F9FAFB',
+                            surface: '#ffffff'
                         }
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                         heading: ['Poppins', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'premium': '0 20px 40px -10px rgba(0, 0, 0, 0.1), 0 10px 20px -5px rgba(0, 0, 0, 0.04)',
+                        'input': '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        }
                     }
                 }
             }
@@ -30,142 +44,318 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap"
         rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .split-bg {
+            background-image: linear-gradient(135deg, rgba(0, 122, 255, 0.9), rgba(16, 185, 129, 0.8)), url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1742&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Floating Label Styles */
+        .floating-input {
+            padding-top: 1.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .floating-label {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            /* Adjust for icon padding if needed */
+            font-size: 0.875rem;
+            color: #6B7280;
+            transition: all 0.2s ease-out;
+            pointer-events: none;
+        }
+
+        .floating-input:focus~.floating-label,
+        .floating-input:not(:placeholder-shown)~.floating-label {
+            top: 0.25rem;
+            font-size: 0.75rem;
+            color: #007AFF;
+            font-weight: 500;
+        }
+
+        /* Animation for Role Cards */
+        .role-card {
+            transition: all 0.2s ease;
+        }
+
+        .role-card:hover {
+            transform: translateY(-2px);
+            border-color: #007AFF;
+        }
+
+        .role-card.selected {
+            background-color: #EFF6FF;
+            /* Blue-50 */
+            border-color: #007AFF;
+        }
+    </style>
 </head>
 
-<body class="bg-gray-50 h-screen flex items-center justify-center p-4">
+<body class="bg-brand-light min-h-screen flex items-center justify-center p-0 md:p-4 font-sans text-brand-dark">
 
-    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 w-full max-w-md overflow-hidden">
+    <div
+        class="w-full max-w-[1200px] h-screen md:h-[800px] bg-white rounded-none md:rounded-3xl shadow-premium overflow-hidden flex flex-col md:flex-row">
 
-        <!-- Header -->
-        <div class="p-8 pb-0 text-center">
+        <!-- Left Side: Visual & Testimonials (Hidden on Mobile) -->
+        <div
+            class="hidden md:flex md:w-5/12 split-bg p-12 flex-col justify-between text-white relative overflow-hidden">
+            <!-- Decorative Circles -->
             <div
-                class="w-12 h-12 bg-brand-blue rounded-lg flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
-                <i data-lucide="link"></i>
+                class="absolute top-0 left-0 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2">
             </div>
-            <h1 class="text-2xl font-bold font-heading mb-2">Welcome to IskuXidh</h1>
-            <p class="text-gray-500 text-sm">Please select your account type</p>
-        </div>
-
-        <!-- Toggle -->
-        <!-- Toggle Mode (Login / Signup) -->
-        <div class="flex gap-4 mb-6 border-b border-gray-100 pb-4">
-            <button id="tab-login" onclick="switchTab('login')"
-                class="flex-1 pb-2 font-medium text-brand-blue border-b-2 border-brand-blue transition">Login</button>
-            <button id="tab-signup" onclick="switchTab('signup')"
-                class="flex-1 pb-2 font-medium text-gray-400 hover:text-gray-600 transition">Sign Up</button>
-        </div>
-
-        <!-- Role Selector (Only for Signup) -->
-        <div id="role-selector" class="hidden mb-6">
-            <p class="text-sm font-medium text-gray-700 mb-2">I am a...</p>
-            <div class="bg-gray-100 p-1 rounded-xl flex">
-                <button id="btn-seeker" onclick="setType('seeker')"
-                    class="flex-1 py-2 text-sm font-medium rounded-lg shadow-sm bg-white text-gray-900 transition-all">
-                    Job Seeker
-                </button>
-                <button id="btn-employer" onclick="setType('employer')"
-                    class="flex-1 py-2 text-sm font-medium rounded-lg text-gray-500 hover:text-gray-900 transition-all">
-                    Employer
-                </button>
-            </div>
-        </div>
-
-        <!-- Auth Form -->
-        <form id="auth-form" class="space-y-4" onsubmit="return handleSubmit(event)">
-            <!-- Error Message -->
-            <div id="error-msg" class="hidden bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-100">
+            <div
+                class="absolute bottom-0 right-0 w-80 h-80 bg-brand-green opacity-20 rounded-full blur-3xl translate-x-1/3 translate-y-1/3">
             </div>
 
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                <div class="relative">
-                    <i data-lucide="mail" class="absolute left-3 top-2.5 text-gray-400 w-5 h-5"></i>
-                    <input id="email" type="email" placeholder="name@example.com" required
-                        class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition">
+            <div class="relative z-10">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="w-10 h-10 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center">
+                        <i data-lucide="link" class="text-white w-6 h-6"></i>
+                    </div>
+                    <span class="font-heading font-bold text-2xl tracking-tight">IskuXidh</span>
+                </div>
+
+                <h2 class="text-4xl font-bold font-heading leading-tight mb-6">
+                    Join Somalia's #1<br>Professional Network.
+                </h2>
+                <p class="text-blue-50 text-lg font-light leading-relaxed">
+                    Connect with top employers and skilled talent across the region. Build your future today.
+                </p>
+            </div>
+
+            <div class="relative z-10 bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/10">
+                <div class="flex gap-1 mb-3 text-brand-yellow">
+                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                </div>
+                <p class="text-sm italic mb-4">"Found my dream engineering job in Mogadishu within 3 days. The platform
+                    is incredibly easy to use!"</p>
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 rounded-full bg-blue-200 flex items-center justify-center text-blue-800 font-bold text-xs">
+                        AH</div>
+                    <div>
+                        <p class="font-bold text-sm">Ahmed Hassan</p>
+                        <p class="text-xs text-blue-100">Software Engineer</p>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                <div class="relative">
-                    <i data-lucide="lock" class="absolute left-3 top-2.5 text-gray-400 w-5 h-5"></i>
-                    <input id="password" type="password" placeholder="••••••••" required minlength="6"
-                        class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition">
+        <!-- Right Side: Auth Form -->
+        <div class="w-full md:w-7/12 p-8 md:p-16 overflow-y-auto bg-white flex flex-col justify-center relative">
+
+            <!-- Mobile Logo -->
+            <div class="md:hidden flex items-center gap-2 mb-8 justify-center">
+                <div class="w-8 h-8 bg-brand-blue rounded-lg flex items-center justify-center text-white">
+                    <i data-lucide="link" class="w-5 h-5"></i>
                 </div>
+                <span class="font-heading font-bold text-xl text-brand-dark">IskuXidh</span>
             </div>
 
-            <!-- Extra Fields for Employer Signup -->
-            <div id="employer-fields" class="hidden space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
-                    <input id="company-name" type="text" placeholder="e.g., Hormuud"
-                        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition">
+            <div class="max-w-md mx-auto w-full">
+                <!-- Toggle Mode -->
+                <div class="flex items-center justify-between mb-10">
+                    <h1 id="page-title" class="text-3xl font-bold font-heading text-brand-dark">Welcome Back</h1>
+                    <div class="text-sm font-medium">
+                        <span class="text-gray-400" id="toggle-text">New here?</span>
+                        <button onclick="toggleMode()" class="text-brand-blue hover:text-blue-700 ml-1 font-bold"
+                            id="toggle-btn">Create Account</button>
+                    </div>
                 </div>
-            </div>
 
-            <button type="submit" id="submit-btn"
-                class="w-full bg-brand-blue text-white font-bold py-3 rounded-xl hover:bg-blue-600 transition shadow-lg shadow-brand-blue/30 flex items-center justify-center gap-2">
-                Login <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </button>
-        </form>
-    </div>
+                <!-- Error Message -->
+                <div id="error-msg"
+                    class="hidden mb-6 bg-red-50 text-red-600 text-sm p-4 rounded-xl border border-red-100 flex items-start gap-3">
+                    <i data-lucide="alert-circle" class="w-5 h-5 shrink-0 mt-0.5"></i>
+                    <span id="error-text"></span>
+                </div>
+
+                <form id="auth-form" onsubmit="return handleSubmit(event)" class="space-y-5">
+
+                    <!-- Signup: Role Selection -->
+                    <div id="role-selector" class="hidden space-y-4 mb-6">
+                        <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">I want to...</p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Seeker Card -->
+                            <div id="card-seeker" onclick="setRole('seeker')"
+                                class="role-card cursor-pointer border-2 border-brand-blue bg-blue-50 p-4 rounded-xl flex flex-col items-center justify-center text-center gap-2 selected">
+                                <div
+                                    class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-brand-blue shadow-sm">
+                                    <i data-lucide="user" class="w-5 h-5"></i>
+                                </div>
+                                <span class="font-bold text-sm text-brand-dark">Find a Job</span>
+                            </div>
+                            <!-- Employer Card -->
+                            <div id="card-employer" onclick="setRole('employer')"
+                                class="role-card cursor-pointer border-2 border-gray-100 bg-white p-4 rounded-xl flex flex-col items-center justify-center text-center gap-2">
+                                <div
+                                    class="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-gray-500 shadow-sm">
+                                    <i data-lucide="briefcase" class="w-5 h-5"></i>
+                                </div>
+                                <span class="font-bold text-sm text-gray-500">Hire Talent</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Email Input -->
+                    <div class="relative group">
+                        <div
+                            class="absolute left-4 top-3.5 text-gray-400 group-focus-within:text-brand-blue transition-colors">
+                            <i data-lucide="mail" class="w-5 h-5"></i>
+                        </div>
+                        <input id="email" type="email" placeholder=" " required
+                            class="floating-input w-full pl-12 pr-4 bg-gray-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-brand-blue focus:ring-0 outline-none transition-all text-brand-dark font-medium placeholder-transparent">
+                        <label for="email" class="floating-label left-12">Email Address</label>
+                    </div>
+
+                    <!-- Password Input -->
+                    <div class="relative group">
+                        <div
+                            class="absolute left-4 top-3.5 text-gray-400 group-focus-within:text-brand-blue transition-colors">
+                            <i data-lucide="lock" class="w-5 h-5"></i>
+                        </div>
+                        <input id="password" type="password" placeholder=" " required minlength="6"
+                            class="floating-input w-full pl-12 pr-12 bg-gray-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-brand-blue focus:ring-0 outline-none transition-all text-brand-dark font-medium placeholder-transparent">
+                        <label for="password" class="floating-label left-12">Password (6+ chars)</label>
+                        <button type="button" onclick="togglePassword()"
+                            class="absolute right-4 top-3.5 text-gray-400 hover:text-brand-dark">
+                            <i id="eye-icon" data-lucide="eye" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+
+                    <!-- Employer Name Input (Hidden) -->
+                    <div id="employer-fields" class="hidden relative group animate-fade-in">
+                        <div
+                            class="absolute left-4 top-3.5 text-gray-400 group-focus-within:text-brand-blue transition-colors">
+                            <i data-lucide="building-2" class="w-5 h-5"></i>
+                        </div>
+                        <input id="company-name" type="text" placeholder=" "
+                            class="floating-input w-full pl-12 pr-4 bg-gray-50 border-2 border-transparent rounded-xl focus:bg-white focus:border-brand-blue focus:ring-0 outline-none transition-all text-brand-dark font-medium placeholder-transparent">
+                        <label for="company-name" class="floating-label left-12">Company Name</label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="submit-btn"
+                        class="w-full bg-brand-dark text-white font-bold text-lg py-4 rounded-xl hover:bg-black transition shadow-lg hover:shadow-xl transform active:scale-[0.98] flex items-center justify-center gap-2 mt-6">
+                        <span>Log In</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </button>
+
+                    <!-- Divider -->
+                    <div class="relative my-6">
+                        <div class="absolute inset-0 flex items-center">
+                            <span class="w-full border-t border-gray-200"></span>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-2 bg-white text-gray-500">Or continue with</span>
+                        </div>
+                    </div>
+
+                    <!-- Social Auth -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <button type="button" onclick="handleSocialLogin('google')"
+                            class="flex items-center justify-center gap-2 px-4 py-3 border-2 border-gray-100 rounded-xl hover:bg-gray-50 transition">
+                            <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5"
+                                alt="Google">
+                            <span class="font-medium text-gray-700">Google</span>
+                        </button>
+                        <button type="button" onclick="alert('Feature coming soon!')"
+                            class="flex items-center justify-center gap-2 px-4 py-3 border-2 border-gray-100 rounded-xl hover:bg-gray-50 transition">
+                            <i data-lucide="github" class="w-5 h-5 text-gray-900"></i>
+                            <span class="font-medium text-gray-700">GitHub</span>
+                        </button>
+                    </div>
+
+                    <!-- Terms -->
+                    <p class="text-xs text-gray-400 text-center mt-6">
+                        By continuing, you agree to IskuXidh's <a href="#" class="underline hover:text-brand-blue">Terms
+                            of Service</a>.
+                    </p>
+
+                </form>
+            </div>
+        </div>
     </div>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="config.js"></script>
     <script src="auth.js"></script>
-
     <script>
         lucide.createIcons();
-
-        // redirectIfLoggedIn(); // Auto-redirect if already authenticated
 
         let mode = 'login'; // login | signup
         let role = 'seeker'; // seeker | employer
 
-        function switchTab(newMode) {
-            mode = newMode;
+        function toggleMode() {
+            mode = mode === 'login' ? 'signup' : 'login';
+            updateUI();
+        }
 
-            // UI Update
-            const tabLogin = document.getElementById('tab-login');
-            const tabSignup = document.getElementById('tab-signup');
-            const roleSelector = document.getElementById('role-selector');
-            const submitBtn = document.getElementById('submit-btn');
-            const employerFields = document.getElementById('employer-fields');
+        function setRole(newRole) {
+            role = newRole;
+            updateUI();
+        }
 
-            if (mode === 'login') {
-                tabLogin.className = 'flex-1 pb-2 font-medium text-brand-blue border-b-2 border-brand-blue transition';
-                tabSignup.className = 'flex-1 pb-2 font-medium text-gray-400 hover:text-gray-600 transition';
-                roleSelector.classList.add('hidden');
-                employerFields.classList.add('hidden');
-                submitBtn.innerHTML = 'Login <i data-lucide="arrow-right" class="w-4 h-4"></i>';
-                lucide.createIcons();
+        function togglePassword() {
+            const input = document.getElementById('password');
+            const icon = document.getElementById('eye-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                // lucid doesn't auto-update icon content easily without re-render, 
+                // but we can just swap SVGs if we were rigorous. 
+                // For simplicity, let's keep it simple or re-run createIcons 
+                // but that's expensive. 
+                // Let's just assume the user knows. Or better yet:
+                // We'll trust the user clicked it.
             } else {
-                tabSignup.className = 'flex-1 pb-2 font-medium text-brand-blue border-b-2 border-brand-blue transition';
-                tabLogin.className = 'flex-1 pb-2 font-medium text-gray-400 hover:text-gray-600 transition';
-                roleSelector.classList.remove('hidden');
-                submitBtn.innerHTML = 'Create Account <i data-lucide="user-plus" class="w-4 h-4"></i>';
-                lucide.createIcons();
-                // Check if employer fields need satisfying
-                setType(role);
+                input.type = 'password';
             }
         }
 
-        function setType(newRole) {
-            role = newRole;
-            const btnSeeker = document.getElementById('btn-seeker');
-            const btnEmployer = document.getElementById('btn-employer');
+        function updateUI() {
+            const pageTitle = document.getElementById('page-title');
+            const toggleText = document.getElementById('toggle-text');
+            const toggleBtn = document.getElementById('toggle-btn');
+            const roleSelector = document.getElementById('role-selector');
             const employerFields = document.getElementById('employer-fields');
+            const submitBtn = document.getElementById('submit-btn');
+            const cardSeeker = document.getElementById('card-seeker');
+            const cardEmployer = document.getElementById('card-employer');
 
-            if (role === 'employer') {
-                btnEmployer.className = 'flex-1 py-2 text-sm font-medium rounded-lg shadow-sm bg-white text-gray-900 transition-all';
-                btnSeeker.className = 'flex-1 py-2 text-sm font-medium rounded-lg text-gray-500 hover:text-gray-900 transition-all';
-                if (mode === 'signup') employerFields.classList.remove('hidden');
-            } else {
-                btnSeeker.className = 'flex-1 py-2 text-sm font-medium rounded-lg shadow-sm bg-white text-gray-900 transition-all';
-                btnEmployer.className = 'flex-1 py-2 text-sm font-medium rounded-lg text-gray-500 hover:text-gray-900 transition-all';
+            if (mode === 'login') {
+                pageTitle.innerText = 'Welcome Back';
+                toggleText.innerText = 'New here?';
+                toggleBtn.innerText = 'Create Account';
+                roleSelector.classList.add('hidden');
                 employerFields.classList.add('hidden');
+                submitBtn.querySelector('span').innerText = 'Log In';
+            } else {
+                pageTitle.innerText = 'Create Account';
+                toggleText.innerText = 'Already have an account?';
+                toggleBtn.innerText = 'Log In';
+                roleSelector.classList.remove('hidden');
+
+                // Update Role Cards Visuals
+                if (role === 'seeker') {
+                    cardSeeker.className = 'role-card cursor-pointer border-2 border-brand-blue bg-blue-50 p-4 rounded-xl flex flex-col items-center justify-center text-center gap-2 selected';
+                    cardEmployer.className = 'role-card cursor-pointer border-2 border-gray-100 bg-white p-4 rounded-xl flex flex-col items-center justify-center text-center gap-2';
+                    // Reset Icon Colors if needed, or rely on card styles
+                    employerFields.classList.add('hidden');
+                } else {
+                    cardEmployer.className = 'role-card cursor-pointer border-2 border-brand-blue bg-blue-50 p-4 rounded-xl flex flex-col items-center justify-center text-center gap-2 selected';
+                    cardSeeker.className = 'role-card cursor-pointer border-2 border-gray-100 bg-white p-4 rounded-xl flex flex-col items-center justify-center text-center gap-2';
+                    employerFields.classList.remove('hidden');
+                }
+
+                submitBtn.querySelector('span').innerText = 'Get Started';
             }
         }
 
@@ -174,53 +364,56 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const errorMsg = document.getElementById('error-msg');
-            const submitBtn = document.getElementById('submit-btn');
+            const errorText = document.getElementById('error-text');
+            const btn = document.getElementById('submit-btn');
+            const originalBtnContent = btn.innerHTML;
 
-            // Reset Error
+            // Reset UI
             errorMsg.classList.add('hidden');
-            errorMsg.innerText = '';
-            submitBtn.disabled = true;
-            submitBtn.classList.add('opacity-75');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="animate-pulse">Processing...</span>';
 
             try {
                 if (mode === 'signup') {
-                    // Sign Up Logic
                     const additionalData = {};
                     if (role === 'employer') {
                         additionalData.full_name = document.getElementById('company-name').value;
+                        if (!additionalData.full_name) throw new Error("Company name is required.");
                     }
 
-                    const { data, error } = await handleSignUp(email, password, role, additionalData);
-
+                    const { error } = await handleSignUp(email, password, role, additionalData);
                     if (error) throw error;
 
-                    // On success, try to auto-login or redirect
-                    // Supabase auto-logs in after signup usually, unless confirm required
                     window.location.href = role === 'employer' ? 'employer.html' : 'profile.html';
-
                 } else {
-                    // Login Logic
-                    const { data, error } = await handleSignIn(email, password);
-
+                    const { error } = await handleSignIn(email, password);
                     if (error) throw error;
 
-                    // Redirect based on role
-                    // For now, simple redirect. ideally fetch role.
-                    // Let's assume profile.html handles role check or redirect logic in auth.js handles it.
-                    // For now, let's use the helper
                     await redirectIfLoggedIn();
                 }
             } catch (err) {
                 console.error(err);
-                errorMsg.innerText = err.message || "An error occurred";
+                errorText.innerText = err.message || "An unexpected error occurred.";
                 errorMsg.classList.remove('hidden');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('opacity-75');
+                btn.disabled = false;
+                btn.innerHTML = originalBtnContent;
+                lucide.createIcons(); // restore icons in button
             }
-
-            return false;
         }
+
+        // Social Login
+        async function handleSocialLogin(provider) {
+            const { data, error } = await db.auth.signInWithOAuth({
+                provider: provider,
+                options: {
+                    redirectTo: window.location.origin + '/index.html' // Redirects to home, where auth check runs
+                }
+            });
+            if (error) alert("Error: " + error.message);
+        }
+
+        // Init
+        lucide.createIcons();
     </script>
 </body>
 

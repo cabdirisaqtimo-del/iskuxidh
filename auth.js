@@ -18,7 +18,11 @@ async function handleSignUp(email, password, role, additionalData = {}) {
     });
 
     if (authError) {
-        alert("Sign Up Error: " + authError.message);
+        if (authError.message.includes("security purposes") || authError.status === 429) {
+            alert("⚠️ Too many requests. Please wait 15-30 seconds before trying again.");
+        } else {
+            alert("Sign Up Error: " + authError.message);
+        }
         return { error: authError };
     }
 

@@ -22,6 +22,25 @@
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                         heading: ['Poppins', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-out',
+                        'fade-in-up': 'fadeInUp 0.8s ease-out',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
                     }
                 }
             }
@@ -75,7 +94,14 @@
                     <a href="jobs.html" class="text-gray-600 hover:text-brand-blue transition" data-i18n="nav.jobs">Find
                         Jobs</a>
                     <a href="chat.html" class="text-gray-600 hover:text-brand-blue transition">Messages</a>
-                    <a href="#" class="text-gray-600 hover:text-brand-blue transition" data-i18n="nav.hire">Hire</a>
+                    <a href="profile.html"
+                        class="text-gray-600 hover:text-brand-blue transition flex items-center gap-1">
+                        <i data-lucide="user" class="w-4 h-4"></i> My Profile
+                    </a>
+                    <a href="admin.html"
+                        class="text-red-500 font-bold hover:text-red-600 transition flex items-center gap-1">
+                        <i data-lucide="shield" class="w-4 h-4"></i> Admin
+                    </a>
                     <button onclick="toggleLang()" class="flex items-center gap-1 text-gray-600 hover:text-brand-blue">
                         <i data-lucide="globe" class="w-4 h-4"></i>
                         <span id="lang-text">SO</span>
@@ -99,88 +125,131 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="relative pt-32 pb-20 overflow-hidden">
-        <div class="absolute inset-0 z-0 opacity-10">
-            <div
-                class="absolute top-0 right-0 w-96 h-96 bg-brand-blue rounded-full filter blur-3xl translate-x-1/2 -translate-y-1/2">
-            </div>
-            <div
-                class="absolute bottom-0 left-0 w-96 h-96 bg-brand-green rounded-full filter blur-3xl -translate-x-1/2 translate-y-1/2">
-            </div>
+    <section class="relative pt-32 pb-20 overflow-hidden text-white">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+                class="w-full h-full object-cover" alt="Somalia Office">
+            <div class="absolute inset-0 bg-gradient-to-r from-brand-dark/95 to-brand-blue/80 mix-blend-multiply"></div>
         </div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
             <span
-                class="inline-block py-1 px-3 rounded-full bg-brand-blue/10 text-brand-blue text-sm font-semibold mb-6">
+                class="inline-block py-1.5 px-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-sm font-semibold mb-6 animate-fade-in-up">
                 🚀 #1 Job Platform in Somalia
             </span>
-            <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-6" data-i18n="hero.h1">
+            <h1 class="text-4xl md:text-7xl font-bold leading-tight mb-6 font-heading drop-shadow-lg">
                 Shaqo iyo Shaqaale, <br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-brand-green">Hal
-                    Meel.</span>
+                <span class="text-brand-green">Hal Meel.</span>
             </h1>
-            <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto" data-i18n="hero.p">
+            <p class="text-lg md:text-xl text-gray-200 mb-10 max-w-2xl mx-auto leading-relaxed">
                 Connect with verified employers and skilled professionals in Mogadishu, Hargeisa, and beyond. Easy,
                 fast, and trusted.
             </p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
                 <a href="jobs.html"
-                    class="px-8 py-4 rounded-xl bg-brand-blue text-white font-bold text-lg hover:bg-blue-600 transition shadow-xl shadow-brand-blue/30 flex items-center justify-center gap-2">
+                    class="px-8 py-4 rounded-xl bg-brand-green text-white font-bold text-lg hover:bg-emerald-600 transition shadow-xl shadow-green-900/20 flex items-center justify-center gap-2 transform hover:-translate-y-1">
                     <i data-lucide="briefcase"></i> <span data-i18n="hero.btn.find">Find a Job</span>
                 </a>
                 <a href="auth.html"
-                    class="px-8 py-4 rounded-xl bg-white text-brand-dark border-2 border-gray-200 font-bold text-lg hover:border-brand-blue hover:text-brand-blue transition flex items-center justify-center gap-2">
+                    class="px-8 py-4 rounded-xl bg-white/10 backdrop-blur-md text-white border-2 border-white/30 font-bold text-lg hover:bg-white hover:text-brand-dark transition flex items-center justify-center gap-2">
                     <i data-lucide="user-plus"></i> <span data-i18n="hero.btn.post">Post a Job</span>
                 </a>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="mt-16 flex justify-center gap-8 md:gap-16 opacity-80">
+                <div>
+                    <p class="text-3xl font-bold text-white">500+</p>
+                    <p class="text-xs uppercase tracking-widest text-gray-300">Active Jobs</p>
+                </div>
+                <div>
+                    <p class="text-3xl font-bold text-white">1.2k</p>
+                    <p class="text-xs uppercase tracking-widest text-gray-300">Companies</p>
+                </div>
+                <div>
+                    <p class="text-3xl font-bold text-white">15k</p>
+                    <p class="text-xs uppercase tracking-widest text-gray-300">Seekers</p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Categories Section -->
-    <section class="py-16 bg-white">
+    <section class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-2xl font-bold text-center mb-12">Popular Categories</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <!-- Card 1 -->
-                <div
-                    class="p-6 rounded-2xl bg-gray-50 hover:bg-brand-blue/5 transition cursor-pointer group text-center border border-transparent hover:border-brand-blue/20">
-                    <div
-                        class="w-12 h-12 mx-auto bg-blue-100 rounded-full flex items-center justify-center text-brand-blue mb-4 group-hover:scale-110 transition">
-                        <i data-lucide="monitor"></i>
+            <h2 class="text-3xl font-bold text-center mb-4 font-heading">Explore Opportunities</h2>
+            <p class="text-gray-500 text-center mb-12 max-w-2xl mx-auto">Find jobs in top industries across the
+                nation.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Card 1: Technology -->
+                <a href="jobs.html?category=Technology"
+                    class="group relative h-64 rounded-2xl overflow-hidden shadow-lg transform hover:-translate-y-2 transition-all duration-300">
+                    <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        alt="Technology">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-6">
+                        <div
+                            class="w-10 h-10 bg-blue-500/20 backdrop-blur-md rounded-lg flex items-center justify-center text-white mb-3">
+                            <i data-lucide="monitor" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-1">Technology</h3>
+                        <p class="text-gray-300 text-sm">120+ Jobs Available</p>
                     </div>
-                    <h3 class="font-semibold text-gray-900">Technology</h3>
-                    <p class="text-sm text-gray-500">120+ Jobs</p>
-                </div>
-                <!-- Card 2 -->
-                <div
-                    class="p-6 rounded-2xl bg-gray-50 hover:bg-brand-green/5 transition cursor-pointer group text-center border border-transparent hover:border-brand-green/20">
-                    <div
-                        class="w-12 h-12 mx-auto bg-green-100 rounded-full flex items-center justify-center text-brand-green mb-4 group-hover:scale-110 transition">
-                        <i data-lucide="truck"></i>
+                </a>
+
+                <!-- Card 2: Logistics -->
+                <a href="jobs.html?category=Logistics"
+                    class="group relative h-64 rounded-2xl overflow-hidden shadow-lg transform hover:-translate-y-2 transition-all duration-300">
+                    <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        alt="Logistics">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-6">
+                        <div
+                            class="w-10 h-10 bg-green-500/20 backdrop-blur-md rounded-lg flex items-center justify-center text-white mb-3">
+                            <i data-lucide="truck" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-1">Logistics</h3>
+                        <p class="text-gray-300 text-sm">85+ Jobs Available</p>
                     </div>
-                    <h3 class="font-semibold text-gray-900">Logistics</h3>
-                    <p class="text-sm text-gray-500">85+ Jobs</p>
-                </div>
-                <!-- Card 3 -->
-                <div
-                    class="p-6 rounded-2xl bg-gray-50 hover:bg-brand-yellow/5 transition cursor-pointer group text-center border border-transparent hover:border-brand-yellow/20">
-                    <div
-                        class="w-12 h-12 mx-auto bg-yellow-100 rounded-full flex items-center justify-center text-brand-yellow mb-4 group-hover:scale-110 transition">
-                        <i data-lucide="home"></i>
+                </a>
+
+                <!-- Card 3: Domestic & Care -->
+                <a href="jobs.html?category=Domestic"
+                    class="group relative h-64 rounded-2xl overflow-hidden shadow-lg transform hover:-translate-y-2 transition-all duration-300">
+                    <img src="https://images.unsplash.com/photo-1556910103-1c02745a30bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        alt="Domestic">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-6">
+                        <div
+                            class="w-10 h-10 bg-yellow-500/20 backdrop-blur-md rounded-lg flex items-center justify-center text-white mb-3">
+                            <i data-lucide="home" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-1">Domestic & Care</h3>
+                        <p class="text-gray-300 text-sm">200+ Jobs Available</p>
                     </div>
-                    <h3 class="font-semibold text-gray-900">Domestic</h3>
-                    <p class="text-sm text-gray-500">200+ Jobs</p>
-                </div>
-                <!-- Card 4 -->
-                <div
-                    class="p-6 rounded-2xl bg-gray-50 hover:bg-purple-50 transition cursor-pointer group text-center border border-transparent hover:border-purple-200">
-                    <div
-                        class="w-12 h-12 mx-auto bg-purple-100 rounded-full flex items-center justify-center text-purple-600 mb-4 group-hover:scale-110 transition">
-                        <i data-lucide="briefcase"></i>
+                </a>
+
+                <!-- Card 4: Finance -->
+                <a href="jobs.html?category=Finance"
+                    class="group relative h-64 rounded-2xl overflow-hidden shadow-lg transform hover:-translate-y-2 transition-all duration-300">
+                    <img src="https://images.unsplash.com/photo-1554224155-9844c6a8360d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        alt="Finance">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-6">
+                        <div
+                            class="w-10 h-10 bg-purple-500/20 backdrop-blur-md rounded-lg flex items-center justify-center text-white mb-3">
+                            <i data-lucide="briefcase" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-1">Finance & Admin</h3>
+                        <p class="text-gray-300 text-sm">45+ Jobs Available</p>
                     </div>
-                    <h3 class="font-semibold text-gray-900">Finance</h3>
-                    <p class="text-sm text-gray-500">45+ Jobs</p>
-                </div>
+                </a>
             </div>
         </div>
     </section>
@@ -193,10 +262,22 @@
                 <span class="font-heading font-bold text-2xl">IskuXidh</span>
             </div>
             <p class="text-gray-400 mb-8">Connecting Somalia's Talent.</p>
-            <div class="flex justify-center gap-6 text-gray-400">
-                <a href="#" class="hover:text-white">Privacy</a>
-                <a href="#" class="hover:text-white">Terms</a>
-                <a href="#" class="hover:text-white">Contact</a>
+
+            <!-- Contact Dynamic Section -->
+            <div class="flex flex-col md:flex-row justify-center gap-6 mb-8">
+                <a id="contact-email" href="#"
+                    class="flex items-center justify-center gap-2 text-gray-300 hover:text-white transition bg-gray-800/50 px-4 py-2 rounded-full">
+                    <i data-lucide="mail" class="w-4 h-4"></i> <span id="lbl-email">Loading...</span>
+                </a>
+                <a id="contact-whatsapp" href="#" target="_blank"
+                    class="flex items-center justify-center gap-2 text-gray-300 hover:text-green-400 transition bg-gray-800/50 px-4 py-2 rounded-full">
+                    <i data-lucide="message-circle" class="w-4 h-4"></i> <span id="lbl-whatsapp">WhatsApp Us</span>
+                </a>
+            </div>
+
+            <div class="flex justify-center gap-6 text-gray-500 text-sm">
+                <a href="#" class="hover:text-white">Privacy Policy</a>
+                <a href="#" class="hover:text-white">Terms of Service</a>
             </div>
         </div>
     </footer>
@@ -207,16 +288,28 @@
 
         // Auth Check
         async function init() {
+            // Load Contact Info
+            const email = localStorage.getItem('contact_email') || 'cabdirisqmuxumed@gmail.com';
+            const whatsapp = localStorage.getItem('contact_whatsapp') || '252610000000';
+
+            document.getElementById('lbl-email').innerText = email;
+            document.getElementById('contact-email').href = 'mailto:' + email;
+
+            document.getElementById('contact-whatsapp').href = 'https://wa.me/' + whatsapp.replace(/\D/g, ''); // Sanitize
+
+            // Auth Logic
             const { data: { session } } = await db.auth.getSession();
             const authBtn = document.getElementById('auth-btn');
 
             if (session) {
                 // Fetch Profile to know where to link
                 const { data: profile } = await db.from('profiles').select('role').eq('id', session.user.id).single();
-                authBtn.innerText = 'My Dashboard';
-                authBtn.href = profile.role === 'employer' ? 'employer.html' : 'profile.html';
-                authBtn.classList.remove('bg-brand-blue');
-                authBtn.classList.add('bg-brand-green');
+                if (profile) {
+                    authBtn.innerText = 'My Dashboard';
+                    authBtn.href = profile.role === 'employer' ? 'employer.html' : 'profile.html';
+                    authBtn.classList.remove('bg-brand-blue');
+                    authBtn.classList.add('bg-brand-green');
+                }
             }
         }
         init();

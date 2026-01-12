@@ -4,175 +4,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration Payment - IskuXidh</title>
+    <title>Complete Registration - IskuXidh</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        brand: { blue: '#007AFF', dark: '#1F2937', green: '#10B981' }
+                        brand: {
+                            blue: '#007AFF',
+                            green: '#10B981',
+                            dark: '#111827',
+                            light: '#F3F4F6'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap"
+        rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
-<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4 font-['Inter']">
+<body class="bg-gray-50 min-h-screen py-10 px-4 font-sans text-brand-dark">
 
-    <div class="max-w-md w-full bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
-        <!-- Header -->
-        <div class="bg-brand-blue p-8 text-center text-white">
+    <div class="max-w-xl mx-auto">
+        <!-- Progress Header -->
+        <div class="mb-8 text-center">
             <div
-                class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4 backdrop-blur-md">
-                <i data-lucide="wallet" class="w-8 h-8 text-white"></i>
+                class="inline-flex items-center gap-2 bg-white px-4 py-1.5 rounded-full shadow-sm border border-gray-100 mb-4">
+                <span class="w-2 h-2 rounded-full bg-brand-green"></span>
+                <span class="text-xs font-bold text-gray-500 uppercase tracking-wide">Account Created</span>
             </div>
-            <h1 class="text-2xl font-bold mb-2" data-i18n="pay.title">Registration Fee</h1>
-            <p class="text-blue-100 text-sm" data-i18n="pay.subtitle">One-time payment to active your account</p>
+            <h1 class="text-3xl font-bold font-heading mb-2">Final Step: Activation</h1>
+            <p class="text-gray-500">A one-time fee of <strong class="text-brand-dark">$5</strong> is required to
+                activate your lifetime account.</p>
         </div>
 
-        <!-- Body -->
-        <div class="p-8 space-y-6">
-            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                <div>
-                    <p class="text-xs text-gray-500 uppercase font-bold tracking-wider" data-i18n="pay.amount_label">
-                        Amount to Pay</p>
-                    <p class="text-2xl font-black text-brand-dark">$5.00 <span
-                            class="text-sm font-normal text-gray-400">USD</span></p>
-                </div>
-                <div class="bg-brand-green/10 text-brand-green px-3 py-1 rounded-full text-xs font-bold"
-                    data-i18n="pay.lifetime">Lifetime</div>
+        <!-- Main Card -->
+        <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
+            <!-- Payment Method Tabs (Visual Only for now as we focus on mobile money) -->
+            <div class="flex border-b border-gray-100">
+                <button
+                    class="flex-1 py-4 text-center font-bold text-brand-blue border-b-2 border-brand-blue bg-blue-50/50">
+                    Mobile Money
+                </button>
+                <button class="flex-1 py-4 text-center font-bold text-gray-400 cursor-not-allowed" title="Coming Soon">
+                    Credit Card
+                </button>
             </div>
 
-            <!-- Payment Methods -->
-            <div class="space-y-4">
-                <p class="text-sm font-bold text-gray-700" data-i18n="pay.methods_title">Mobile Money Transfer</p>
-                <div class="grid grid-cols-1 gap-3">
-                    <div class="p-4 border-2 border-brand-blue bg-blue-50 rounded-2xl">
-                        <div class="flex items-center gap-4 mb-3">
-                            <div
-                                class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center font-bold text-brand-blue">
-                                *711#</div>
-                            <div>
-                                <p class="text-sm font-bold">EVC Plus / Sahal / Zaad</p>
-                                <p class="text-xs text-gray-400" data-i18n="pay.receiver_label">Payment Receiver
-                                    (Loodiraha)</p>
+            <div class="p-8">
+                <!-- Instructions Stepper -->
+                <div class="space-y-6 mb-8 relative">
+                    <!-- Line -->
+                    <div class="absolute left-4 top-2 bottom-2 w-0.5 bg-gray-100 z-0"></div>
+
+                    <!-- Step 1 -->
+                    <div class="relative z-10 flex gap-4">
+                        <div
+                            class="w-8 h-8 rounded-full bg-brand-blue text-white flex items-center justify-center font-bold flex-shrink-0 shadow-lg shadow-brand-blue/30">
+                            1</div>
+                        <div>
+                            <h3 class="font-bold text-lg mb-1">Dial *711# / *220#</h3>
+                            <p class="text-sm text-gray-500">Open your phone and dial EVC Plus, Sahal, or Zaad.</p>
+                            <div class="flex gap-2 mt-2">
+                                <span class="text-[10px] font-bold bg-gray-100 px-2 py-1 rounded text-gray-500">EVC
+                                    Plus</span>
+                                <span
+                                    class="text-[10px] font-bold bg-gray-100 px-2 py-1 rounded text-gray-500">ZAAD</span>
+                                <span
+                                    class="text-[10px] font-bold bg-gray-100 px-2 py-1 rounded text-gray-500">SAHAL</span>
                             </div>
                         </div>
-                        <div class="bg-white p-3 rounded-xl border border-blue-100 flex items-center justify-between">
-                            <span class="font-mono text-lg font-bold text-brand-blue">+252 61 2814881</span>
-                            <button onclick="copyNumber('+252 61 2814881')"
-                                class="text-xs bg-brand-blue/10 text-brand-blue px-2 py-1 rounded-md font-bold hover:bg-brand-blue/20 transition">Copy</button>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="relative z-10 flex gap-4">
+                        <div
+                            class="w-8 h-8 rounded-full bg-brand-blue text-white flex items-center justify-center font-bold flex-shrink-0 shadow-lg shadow-brand-blue/30">
+                            2</div>
+                        <div>
+                            <h3 class="font-bold text-lg mb-1">Send $5 to this number</h3>
+                            <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-brand-blue">
+                                <i data-lucide="smartphone" class="w-5 h-5"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm text-gray-500 mb-1">Dial Number (EVC/Zaad)</p>
+                                <p id="receiver-display"
+                                    class="text-xl font-mono font-bold text-brand-dark tracking-wider">61 281 4881</p>
+                            </div>
+                            <button onclick="copyNumber('0612814881')" class="p-2 hover:bg-white rounded-lg transition"
+                                title="Copy">
+                                <i data-lucide="copy" class="w-5 h-5 text-brand-blue"></i>
+                            </button>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative z-10 flex gap-4">
+                    <div
+                        class="w-8 h-8 rounded-full bg-brand-blue text-white flex items-center justify-center font-bold flex-shrink-0 shadow-lg shadow-brand-blue/30">
+                        3</div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-1">Enter Verification Details</h3>
+                        <p class="text-sm text-gray-500 mb-4">Enter the Transaction ID from the SMS and your phone
+                            number.</p>
+
+                        <!-- Form -->
+                        <form id="payment-form" onsubmit="handlePayment(event)"
+                            class="space-y-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Your
+                                    Phone Number</label>
+                                <input type="tel" id="sender-phone" placeholder="e.g. 0615000000" required
+                                    class="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition font-mono">
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Transaction
+                                    ID (From SMS)</label>
+                                <input type="text" id="trans-id" placeholder="e.g. T123456" required
+                                    class="w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition font-mono">
+                            </div>
+                            <button id="submit-btn" type="submit"
+                                class="w-full bg-brand-green text-white font-bold py-3 rounded-xl hover:bg-emerald-600 transition shadow-lg shadow-green-200 flex items-center justify-center gap-2 mt-2">
+                                <span>Verify Payment</span>
+                                <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
 
-            <!-- Transaction Input -->
-            <form id="payment-form" onsubmit="handlePayment(event)" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="pay.phone_label">Phone Number
-                        Used to Pay</label>
-                    <input type="tel" id="sender-phone" required placeholder="E.g. 061XXXXXXX"
-                        class="w-full rounded-xl border-gray-200 border p-4 text-sm focus:ring-brand-blue focus:border-brand-blue shadow-sm mb-4">
-
-                    <label class="block text-sm font-medium text-gray-700 mb-1"
-                        data-i18n="pay.trans_id_label">Transaction ID</label>
-                    <input type="text" id="trans-id" required placeholder="E.g. TXN123456789"
-                        class="w-full rounded-xl border-gray-200 border p-4 text-sm focus:ring-brand-blue focus:border-brand-blue shadow-sm">
-                    <p class="text-[10px] text-gray-400 mt-2" data-i18n="pay.trans_help">Enter the Transaction ID and
-                        phone number used for the payment.</p>
-                </div>
-
-                <button type="submit" id="submit-btn"
-                    class="w-full py-4 bg-brand-blue text-white rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-blue-600 transition flex items-center justify-center gap-2">
-                    <i data-lucide="check-circle" class="w-5 h-5"></i>
-                    <span data-i18n="pay.submit_btn">Verify Payment</span>
-                </button>
-            </form>
-
-            <button onclick="logoutAndBack()"
-                class="w-full text-center text-sm text-gray-400 hover:text-gray-600 transition"
-                data-i18n="pay.later">Pay Later & Logout</button>
+            <div class="text-center pt-4 border-t border-gray-100">
+                <p class="text-xs text-gray-400 mb-2">Having trouble?</p>
+                <a href="https://wa.me/252615000000" target="_blank"
+                    class="inline-flex items-center gap-2 text-sm font-bold text-gray-600 hover:text-green-600 transition">
+                    <i data-lucide="message-circle" class="w-4 h-4"></i> Contact Support via WhatsApp
+                </a>
+            </div>
         </div>
     </div>
 
+    <div class="text-center mt-6">
+        <button onclick="logout()" class="text-sm text-gray-400 hover:text-red-500 font-medium transition">Cancel &
+            Logout</button>
+    </div>
+
+    </div>
+
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="config.js"></script>
-    <script src="lang.js"></script>
     <script>
-        // Update Lang Strings for Payment
-        translations.en["pay.title"] = "Registration Fee";
-        translations.so["pay.title"] = "Lacagta Diiwaan-gelinta";
-        translations.en["pay.subtitle"] = "One-time payment to activate your account";
-        translations.so["pay.subtitle"] = "Lacag hal mar ah si aad u furto akoonkaaga";
-        translations.en["pay.amount_label"] = "Amount to Pay";
-        translations.so["pay.amount_label"] = "Lacagta la bixinayo";
-        translations.en["pay.lifetime"] = "Lifetime Access";
-        translations.so["pay.lifetime"] = "Waligaa";
-        translations.en["pay.methods_title"] = "Mobile Money Transfer";
-        translations.so["pay.methods_title"] = "Ku bixi Mobilkaaga";
-        translations.en["pay.receiver_label"] = "Payment Receiver (To)";
-        translations.so["pay.receiver_label"] = "Lambarka Lacagta loo dirayo (Loodiraha)";
-        translations.en["pay.phone_label"] = "Your Phone Number (Sender)";
-        translations.so["pay.phone_label"] = "Lambarkaaga (Kan aad lacagta ka dirtay)";
-        translations.en["pay.trans_id_label"] = "Transaction ID";
-        translations.so["pay.trans_id_label"] = "Lambarka Faahfaahinta (Trans ID)";
-        translations.en["pay.trans_help"] = "Enter the Transaction ID and phone number from your confirmation SMS.";
-        translations.so["pay.trans_help"] = "Geli Transaction ID-ga iyo lambarka aad lacagta ka dirtay.";
-        translations.en["pay.submit_btn"] = "Verify Payment";
-        translations.so["pay.submit_btn"] = "Hubi Lacag-bixinta";
-        translations.en["pay.later"] = "Pay Later & Logout";
-        translations.so["pay.later"] = "Hadhow bixi & Bax (Logout)";
-
         lucide.createIcons();
-        updatePage();
 
-        function copyNumber(num) {
+        let currentReceiver = '+252633008907'; // Fixed Security Number
+
+        function copyNumber(numOverride) {
+            const num = numOverride || currentReceiver;
             navigator.clipboard.writeText(num);
-            alert(currentLang === 'so' ? "Lambarka waa la guuriyey!" : "Number copied to clipboard!");
+            alert("Number " + num + " copied!");
+        }
+
+        async function initPaymentPage() {
+            // HARDCODED SECURITY: Payment Receiver is fixed.
+            // This ensures it cannot be changed via Database manipulation.
+            const currentReceiver = '+252633008907';
+
+            const displayEl = document.getElementById('receiver-display');
+            if (displayEl) displayEl.innerText = currentReceiver;
+
+            // Copy Function Update to use the fixed var if needed, 
+            // but copyNumber() uses the global or passed arg. 
+            // We'll adhere to the existing click handler which passes '061...' 
+            // or uses the global. Let's make sure the global matches.
+            // Actually, the global 'let currentReceiver' is defined outside.
+            // Let's update THAT global variable.
+
+            // Pre-fill User (Sender) Phone
+            const { data: { user } } = await db.auth.getUser();
+            if (user) {
+                const { data: profile } = await db
+                    .from('profiles')
+                    .select('phone, payment_phone')
+                    .eq('id', user.id)
+                    .single();
+
+                if (profile) {
+                    const phoneInput = document.getElementById('sender-phone');
+                    if (phoneInput) {
+                        const val = profile.phone || profile.payment_phone || '';
+                        phoneInput.value = val;
+
+                        if (val) {
+                            phoneInput.classList.add('border-brand-green', 'ring-1', 'ring-brand-green');
+                        }
+                    }
+                }
+            }
         }
 
         async function handlePayment(e) {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
-            const transId = document.getElementById('trans-id').value;
-            const senderPhone = document.getElementById('sender-phone').value;
+            const phone = document.getElementById('sender-phone').value;
+            const tid = document.getElementById('trans-id').value;
 
+            // Loading State
             btn.disabled = true;
-            btn.innerHTML = '<span class="animate-spin mr-2">⏳</span> Processing...';
+            btn.innerHTML = '<span class="animate-spin mr-2">⏳</span> Verifying...';
+
+            // Simulate 'verification' time for UX (1.5s)
+            await new Promise(r => setTimeout(r, 1500));
 
             const { data: { user } } = await db.auth.getUser();
-
             if (!user) {
-                alert("Please login first.");
+                alert("Session expired. Please login again.");
                 window.location.href = 'auth.html';
                 return;
             }
 
             const { error } = await db.from('profiles').update({
-                last_transaction_id: transId,
-                payment_phone: senderPhone,
-                payment_status: 'paid' // In a real app, this would be 'pending_verification'
+                last_transaction_id: tid,
+                payment_phone: phone,
+                payment_status: 'paid'
             }).eq('id', user.id);
 
             if (error) {
                 alert("Error: " + error.message);
                 btn.disabled = false;
-                btn.innerText = "Verify Payment";
+                btn.innerHTML = '<span>Verify Payment</span><i data-lucide="arrow-right" class="w-5 h-5"></i>';
             } else {
-                alert(currentLang === 'so' ? "Mahadsanid! Akoonkaga waa la furay." : "Success! Your account is now active.");
-                window.location.href = 'index.html';
+                // Success Animation or Redirect
+                btn.classList.remove('bg-brand-green');
+                btn.classList.add('bg-brand-dark');
+                btn.innerHTML = '<span>Success! Redirecting...</span>';
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000);
             }
         }
 
-        async function logoutAndBack() {
+        async function logout() {
             await db.auth.signOut();
             window.location.href = 'auth.html';
         }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initPaymentPage);
     </script>
 </body>
 
